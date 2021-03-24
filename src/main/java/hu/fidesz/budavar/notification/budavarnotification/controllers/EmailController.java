@@ -1,18 +1,29 @@
 package hu.fidesz.budavar.notification.budavarnotification.controllers;
 
 import hu.fidesz.budavar.notification.budavarnotification.entities.Email;
-import hu.fidesz.budavar.notification.budavarnotification.repositories.EmailRepository;
+import hu.fidesz.budavar.notification.budavarnotification.services.CSVReaderService;
+import hu.fidesz.budavar.notification.budavarnotification.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class EmailController {
 
+    private final EmailService emailService;
+
     @Autowired
-    private EmailRepository emailRepository;
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @RequestMapping("/send")
+    public String send(){
+        emailService.importEmails();
+        emailService.sendReminders();
+        return "ok";
+    }
 
 }
