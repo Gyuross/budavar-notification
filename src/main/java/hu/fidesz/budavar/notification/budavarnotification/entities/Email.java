@@ -26,4 +26,20 @@ public class Email {
         this.emailAddress = emailAddress;
         this.code = code;
     }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public boolean isReceived() {
+        return received;
+    }
+
+    public void setReceived(boolean received) {
+        this.received = received;
+    }
 }
