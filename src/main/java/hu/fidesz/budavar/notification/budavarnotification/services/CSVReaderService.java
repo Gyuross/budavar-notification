@@ -2,6 +2,7 @@ package hu.fidesz.budavar.notification.budavarnotification.services;
 
 import com.opencsv.CSVReader;
 import hu.fidesz.budavar.notification.budavarnotification.entities.Email;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
@@ -14,7 +15,8 @@ public class CSVReaderService {
     public List<Email> parse(String fileName){
         List<Email> emails = new ArrayList<>();
 
-        try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
+        try (CSVReader reader = new CSVReader(new FileReader(new ClassPathResource(fileName).getFile())))
+        {
             List<String[]> rows = reader.readAll();
             rows.forEach(r -> emails.add(new Email(r[0], r[1])));
         } catch (Exception e) {
