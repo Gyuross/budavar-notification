@@ -20,11 +20,13 @@ public class Email {
 
     private boolean received;
 
-    public Email() { }
+    public Email() {
+    }
 
     public Email(String emailAddress, String code) {
         this.emailAddress = emailAddress;
         this.code = code;
+        this.received = false;
     }
 
     public String getEmailAddress() {

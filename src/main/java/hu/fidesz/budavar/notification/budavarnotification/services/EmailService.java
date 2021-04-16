@@ -20,19 +20,23 @@ public class EmailService {
 
     private final CSVReaderService csvReaderService;
 
+    private final String link = "https://boroczlaszlo.hu/kerdoiv/";
+
     @Autowired
     public EmailService(CSVReaderService csvReaderService) {
         this.csvReaderService = csvReaderService;
     }
 
-    public void sendReminders(){
+    public void sendReminders() {
         emailRepository
                 .findAll()
                 .stream()
                 .filter(x -> !x.isReceived())
                 .forEach(email -> {
                     try {
-                        emailSender.send(email.getEmailAddress(), ReminderMailTemplate.class, new HashMap<>(){{ put("code", email.getCode()); }});
+                        emailSender.send(email.getEmailAddress(), ReminderMailTemplate.class, new HashMap<>() {{
+                            put("link", link + email.getCode());
+                        }});
                         email.setReceived(true);
                         emailRepository.save(email);
                     } catch (Exception e) {
@@ -41,15 +45,15 @@ public class EmailService {
                 });
     }
 
-    public void importEmails(){
+    public void importEmails() {
         var newEmails = csvReaderService.parse("emails.csv");
         var oldEmails = emailRepository.findAll();
 
         newEmails
-            .stream()
-            .filter(newEmail -> !oldEmails
-                    .stream()
-                    .anyMatch(oldEmail -> oldEmail.getEmailAddress().equals(newEmail.getEmailAddress())))
-            .forEach(emailRepository::save);
+                .stream()
+                .filter(newEmail -> !oldEmails
+                                        .stream()
+                                        .anyMatch(oldEmail -> oldEmail.getEmailAddress().equals(newEmail.getEmailAddress())))
+                .forEach(emailRepository::save);
     }
 }

@@ -12,11 +12,10 @@ import java.util.List;
 @Component
 public class CSVReaderService {
 
-    public List<Email> parse(String fileName){
+    public List<Email> parse(String fileName) {
         List<Email> emails = new ArrayList<>();
 
-        try (CSVReader reader = new CSVReader(new FileReader(new ClassPathResource(fileName).getFile())))
-        {
+        try (CSVReader reader = new CSVReader(new FileReader(new ClassPathResource(fileName).getFile()))) {
             List<String[]> rows = reader.readAll();
             rows.forEach(r -> emails.add(new Email(r[0], r[1])));
         } catch (Exception e) {
